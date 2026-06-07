@@ -1,0 +1,50 @@
+CAPGEMINI BUILD CHALLENGE
+=========================
+
+Welcome! You have 2 hours to build any small app you can imagine.
+You don't need to know how to code — just tell Claude what you want,
+in your own words, and it will build it for you.
+
+----------------------------------------------------------------------
+FIRST TIME SETUP (do this once)
+----------------------------------------------------------------------
+
+1. Make sure Node.js is installed: https://nodejs.org
+
+2. Open a terminal in this folder and run:
+
+       npm install
+
+   (This downloads what the app needs — about 30 seconds.)
+
+----------------------------------------------------------------------
+START YOUR APP
+----------------------------------------------------------------------
+
+3. Run:
+
+       npm run dev
+
+4. Open this link in your browser:
+
+       http://localhost:3000
+
+   You'll see an empty Capgemini screen. That's normal — it's your
+   blank canvas.
+
+----------------------------------------------------------------------
+NOW BUILD
+----------------------------------------------------------------------
+
+Just talk to Claude. For example:
+
+   "Build me a tool to collect customer feedback."
+   "Make a page where my team can log their daily wins."
+   "I want a simple expense tracker."
+
+Anything your app needs to remember is saved automatically inside this
+folder — no accounts or setup required.
+
+If something looks wrong, just say so. Claude will fix it.
+
+Have fun. 🚀

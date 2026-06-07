@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local database (created automatically on first run)
+app.db
+app.db-journal
+app.db-wal
+*.sqlite

@@ -1,36 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Capgemini Build Challenge — Starter
 
-## Getting Started
+A blank starter app for the **Capgemini COMEX Build Challenge**: build any small app you imagine in **2 hours**, just by describing it to Claude in plain words.
 
-First, run the development server:
+New here? Open **`START-HERE.txt`** for step-by-step instructions.
+
+## Quick start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open <http://localhost:3000>. You'll see an empty Capgemini screen — that's your blank canvas. Tell Claude what to build.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## What's inside
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js 16 + React 19** (App Router) — the web app framework.
+- **Built-in local database** — anything your app needs to remember is saved automatically to `app.db` in this folder. No accounts, no cloud, no setup. The storage is set up in `lib/db.js`.
+- **An empty landing page** (`app/page.js`) — replaced by whatever you build.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You don't need to touch any of this yourself. Just describe what you want, and Claude builds it for you. The detailed rules Claude follows live in `AGENTS.md`.
