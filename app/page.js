@@ -20,7 +20,7 @@ export default function Home() {
       </p>
 
       <p className="example">
-        Try: &ldquo;Build me a tool to collect customer feedback.&rdquo;
+        Try: &ldquo;Build me a mini CRM tool.&rdquo;
       </p>
 
       <p className="hint">You have 2 hours — just describe your idea in your own words.</p>
