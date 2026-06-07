@@ -15,6 +15,7 @@ Then open <http://localhost:3000>. You'll see an empty Capgemini screen — that
 
 - **Next.js 16 + React 19** (App Router) — the web app framework.
 - **Built-in local database** — anything your app needs to remember is saved automatically to `app.db` in this folder. No accounts, no cloud, no setup. The storage is set up in `lib/db.js`.
+- **Project skills** — `/givemeideas` and `/diagnostic` live in `.codex/skills`, so they travel with this project folder.
 - **An empty landing page** (`app/page.js`) — replaced by whatever you build.
 
 You don't need to touch any of this yourself. Just describe what you want, and Codex builds it for you. The detailed rules Codex follows live in `AGENTS.md`.

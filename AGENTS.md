@@ -12,7 +12,18 @@ Stack: **Next.js 16 (App Router) + React 19**, with a built-in **local SQLite da
 - Start the app: `npm run dev` → open `http://localhost:3000`
 - Check the whole app compiles: `npm run build`
 - Check code quality: `npm run lint`
-- Make sure the app is running before you tell the user something is ready.
+- Make sure the app is running and previewed before you tell the user something is ready.
+
+## Git rule
+
+- Do not create git commits for this project. This starter is for a live build challenge, not production work. Leave changes uncommitted unless the user explicitly asks for a git commit.
+
+## Project skills
+
+If the user types one of these phrases, use the matching skill:
+
+- `/givemeideas`, `$givemeideas`, or "give me ideas": use `.codex/skills/givemeideas/SKILL.md`.
+- `/diagnostic`, `$diagnostic`, or "run diagnostic": use `.codex/skills/diagnostic/SKILL.md`.
 
 ## Interaction rules (how to talk to the user)
 
@@ -81,8 +92,8 @@ export async function DELETE(request, { params }) {
 
 Always confirm a change actually works before telling the user it's done:
 
-- Make sure `npm run dev` is up; if you just started it, give it a moment.
-- Load the page, exercise the new behavior (add/edit/delete), and confirm saved data comes back — a quick `curl` against the route works too.
+- **Mandatory preview rule:** before you say anything is ready, run `npm run dev` if it is not already running, open the app preview, and give the user the clickable link: `Your app is open here: [link](http://localhost:3000)`.
+- Load the page in the preview, exercise the new behavior (add/edit/delete), and confirm saved data comes back — a quick `curl` against the route works too.
 - When preparing, reviewing, or checking this starter, run `npm run preflight` yourself. Do not ask the user or facilitator to run it unless the environment blocks you.
 - After bigger changes, run `npm run preflight` yourself before saying the work is ready.
 - Only then report success, in plain words.
