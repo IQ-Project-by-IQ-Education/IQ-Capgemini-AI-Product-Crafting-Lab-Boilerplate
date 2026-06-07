@@ -46,5 +46,6 @@ Anything your app needs to remember is saved automatically inside this
 folder — no accounts or setup required.
 
 If something looks wrong, just say so. Claude will fix it.
+For live sessions, keep FACILITATOR-CHECKLIST.txt nearby.
 
 Have fun. 🚀

@@ -1,11 +1,15 @@
+import Image from "next/image";
+
 export default function Home() {
   return (
     <main className="empty">
-      <img
+      <Image
         className="logo"
         src="/capgemini-logo.png"
         alt="Capgemini"
         width={300}
+        height={200}
+        priority
       />
 
       <p className="tag">Build Challenge</p>

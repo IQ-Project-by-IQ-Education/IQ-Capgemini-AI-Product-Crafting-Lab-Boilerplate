@@ -83,6 +83,8 @@ Always confirm a change actually works before telling the user it's done:
 
 - Make sure `npm run dev` is up; if you just started it, give it a moment.
 - Load the page, exercise the new behavior (add/edit/delete), and confirm saved data comes back — a quick `curl` against the route works too.
+- When preparing, reviewing, or checking this starter, run `npm run preflight` yourself. Do not ask the user or facilitator to run it unless the environment blocks you.
+- After bigger changes, run `npm run preflight` yourself before saying the work is ready.
 - Only then report success, in plain words.
 
 ## Troubleshooting (fix it yourself, never hand back errors)
@@ -97,6 +99,13 @@ When something's broken, you own it. Loop until it truly works, then report only
 - **A newly added page or route 404s → restart the dev server** (stop `npm run dev`, start it again). This is the most common one.
 
 If the first fix doesn't hold, try another approach. Simplify if needed.
+
+## Live challenge guardrails
+
+- Keep the app small enough to finish in 2 hours: one main screen, clear actions, and only the saved information the idea truly needs.
+- Avoid adding accounts, outside services, keys, uploads, complex permissions, or extra setup unless the user explicitly asks and it is essential.
+- If the participant asks for a large idea, build the smallest useful version first, show it, then improve it.
+- If anything feels stuck during the session, fix it without asking the participant to troubleshoot.
 
 ## Security considerations
 
