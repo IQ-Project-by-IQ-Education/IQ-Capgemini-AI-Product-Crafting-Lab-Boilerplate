@@ -2,12 +2,6 @@
 
 A blank starter app for the **Capgemini COMEX Build Challenge**: build any small app you imagine in **2 hours**, just by describing it to Claude in plain words.
 
-New here? Open **`START-HERE.txt`** for step-by-step instructions.
-
-For a live session, use:
-
-- **`FACILITATOR-CHECKLIST.txt`** — short guide for the person running the session.
-
 ## Quick start
 
 ```bash
