@@ -2,7 +2,7 @@ import "./globals.css";
 
 export const metadata = {
   title: "Capgemini Build Challenge",
-  description: "Your blank canvas — tell Claude what you'd like to build.",
+  description: "Your blank canvas — tell Codex what you'd like to build.",
 };
 
 export default function RootLayout({ children }) {

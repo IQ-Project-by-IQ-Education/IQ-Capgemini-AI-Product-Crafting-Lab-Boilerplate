@@ -16,7 +16,7 @@ export default function Home() {
 
       <h1>Your canvas is empty</h1>
       <p className="lead">
-        Tell Claude what you&apos;d like to build, and it will appear right here.
+        Tell Codex what you&apos;d like to build, and it will appear right here.
       </p>
 
       <p className="example">
