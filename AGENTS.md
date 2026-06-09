@@ -24,6 +24,7 @@ If the user types one of these phrases, use the matching skill:
 
 - `/givemeideas`, `$givemeideas`, or "give me ideas": use `.codex/skills/givemeideas/SKILL.md`.
 - `/diagnostic`, `$diagnostic`, or "run diagnostic": use `.codex/skills/diagnostic/SKILL.md`.
+- `/kickoff`, `$kickoff`, or "kick off": use `.codex/skills/kickoff/SKILL.md`.
 
 ## Interaction rules (how to talk to the user)
 

@@ -86,6 +86,7 @@ Everything you need is already set up — nothing to configure.
 - 🧠 **Project skills** that travel with the folder (`.codex/skills`):
   - **`/givemeideas`** — a short, executive-friendly menu of app ideas to spark your build.
   - **`/diagnostic`** — a technical readiness check (for helpers) that confirms the machine can build, run, and preview the app.
+  - **`/kickoff`** — prepares, checks, starts, and previews the starter for the participant.
 - 📋 **`AGENTS.md`** — the full playbook the AI assistant follows to talk in plain words and build fast.
 
 You never need to touch any of this yourself.
@@ -137,7 +138,7 @@ You describe an idea  →  The AI assistant builds it  →  It shows on screen  
 │   └── globals.css      # Styling
 ├── lib/
 │   └── db.js            # Local database (your app's memory)
-├── .codex/skills/       # /givemeideas and /diagnostic skills
+├── .codex/skills/       # /givemeideas, /diagnostic, and /kickoff skills
 ├── public/              # Images and static assets
 ├── AGENTS.md            # The assistant's full playbook
 └── app.db               # Your saved data (created automatically)

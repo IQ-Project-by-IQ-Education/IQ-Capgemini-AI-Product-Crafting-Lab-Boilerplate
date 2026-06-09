@@ -1,0 +1,8 @@
+interface:
+  display_name: "Kickoff"
+  short_description: "Install, run, fix, and preview"
+  brand_color: "#0070AD"
+  default_prompt: "Use $kickoff to install, run, fix, and preview the Capgemini Build Challenge app."
+
+policy:
+  allow_implicit_invocation: true
