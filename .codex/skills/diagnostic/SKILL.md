@@ -3,48 +3,93 @@ name: diagnostic
 description: >
   Use this skill when the user types "/diagnostic", "$diagnostic",
   "run diagnostic", "technical diagnostic", "check the setup", or asks whether
-  a Capgemini builder computer has the access needed to build, run Bash/terminal
-  commands, use Codex tools, search the web when needed, and preview the app.
+  a Capgemini builder computer is ready for Windows-based product crafting: using
+  PowerShell, reading and editing files, searching the web, downloading
+  dependencies, running the app, and previewing the result.
 ---
 
 # Diagnostic
 
 Run a technical readiness diagnostic for helpers, not for COMEX builders.
 
-The goal is to verify that the builder's Capgemini computer is not blocked by local restrictions and can perform the work needed during the Build Challenge. The final answer must be a copy-paste checklist that can be sent or shown to the IQ Project team.
+The goal is to verify that the builder's Capgemini Windows computer is not blocked by local restrictions and can perform the work needed during the Build Challenge.
+
+For this challenge, "ready for product crafting" means Codex can do the practical loop a helper needs: understand a plain-language idea, inspect and change project files, search the web when current information is needed, download project dependencies, run checks, start the app, open the preview, and test visible behavior.
+
+The final answer must be a copy-paste checklist that can be sent or shown to the IQ Project team.
 
 Rules:
 - Run the checks yourself and record real evidence.
 - The output can be technical. It is for helpers and IQ Project, not for the builder.
 - Return a checklist that can be copied as-is.
 - This is a check/report only. Do not install missing tools, do not change settings, and do not fix the machine during `/diagnostic`.
+- It is allowed to test whether dependencies can be downloaded. Prefer a harmless registry check first. Only run `npm install`, `pnpm install`, or `yarn` if dependencies are missing or the helper explicitly asks for a full dependency-download test.
 - Do not ask the builder to troubleshoot.
 - Do not create git commits.
 - Do not test external cloud services or ask for accounts.
 - Do not claim that "all tools" work. State exactly what was tested and what is blocked.
+- Prefer Windows PowerShell checks because Capgemini builder computers are expected to run Windows.
+- If PowerShell is unavailable, try Command Prompt checks and report that PowerShell must be allowed.
+- Bash/Git Bash/WSL checks are optional. Do not mark the machine not ready only because Bash is unavailable, unless the session specifically requires Bash.
+- Mark the system `READY` if Codex can read and edit project files, run Windows terminal commands, search the web when needed, reach the package registry or download dependencies, run the app, and load the local preview.
+- Mark the system `NEEDS ATTENTION` if any core product-crafting ability is blocked: file access, file editing, PowerShell or terminal command execution, Node.js, npm, package download access, app startup, local preview, browser/in-app preview, or web search when the session requires current information.
 - If something is missing or blocked, write what Capgemini should activate, install, allow, or whitelist. The report is meant to be sent or shown to IQ Project.
 
 Check:
 1. Correct project folder is open.
 2. Project files can be read.
-3. Codex can run the Bash/terminal commands commonly needed while building, checking, and previewing the app.
-4. Node.js is installed and available with `node -v`.
-5. npm is installed and available with `npm -v`.
-6. Optional package runners/managers can be checked if relevant: `npx --version`, `pnpm -v`, `yarn -v`.
-7. npm scripts can run from the project folder.
-8. Dependencies are already available. If not, report that `npm install`, `pnpm install`, or `yarn` must be allowed, but do not run install commands unless the helper explicitly asks.
-9. Codex can write inside the project when needed.
-10. The readiness check passes: `npm run preflight`.
-11. The app can run with `npm run dev`.
-12. The app can start with `npm start` after a successful build if needed.
-13. The local preview is reachable at `http://localhost:3000`.
-14. Codex file tools can read and edit project files.
-15. Codex Bash/terminal execution tool works for project commands.
-16. A browser or in-app preview tool is available.
-17. The browser or in-app preview tool can load the app page.
-18. Web search / browser search is available when the app build needs up-to-date information.
-19. If the app saves information, Codex can test save, refresh, and reload behavior.
-20. Any permission, sandbox, network, browser, web search, command, Node.js, or npm restriction is clearly listed.
+3. Codex can run PowerShell commands commonly needed while building, checking, and previewing the app.
+4. Command Prompt is available as a fallback, if relevant.
+5. Node.js is installed and available with `node -v`.
+6. npm is installed and available with `npm -v`.
+7. Optional package runners/managers can be checked if relevant: `npx --version`, `pnpm -v`, `yarn -v`.
+8. npm scripts can run from the project folder.
+9. Dependencies are already available, or dependency download access works. If dependencies are missing, report that `npm install`, `pnpm install`, or `yarn` must be allowed, and run the needed install command only if the helper explicitly asks.
+10. Codex can write inside the project when needed.
+11. Codex can edit an existing project file when needed. For the diagnostic itself, do not leave real project edits behind; use a temporary diagnostic file unless the helper asked to remake this skill.
+12. The readiness check passes: `npm run preflight`.
+13. The app can run with `npm run dev`.
+14. The app can start with `npm start` after a successful production build if needed.
+15. The local preview is reachable at `http://localhost:3000`, or at the alternate port chosen by the app if port 3000 is already busy.
+16. Codex file tools can read and edit project files.
+17. Codex terminal execution tool works for project commands.
+18. A browser or in-app preview tool is available.
+19. The browser or in-app preview tool can load the app page.
+20. Web search / browser search is available when the app build needs up-to-date information.
+21. If the app saves information, Codex can test save, refresh, and reload behavior.
+22. Any permission, sandbox, network, browser, web search, command, Node.js, or npm restriction is clearly listed.
+
+Windows command guidance:
+- Prefer `powershell.exe -NoProfile -Command "<command>"` or `pwsh -NoProfile -Command "<command>"` when available.
+- If PowerShell is blocked, use `cmd.exe /c "<command>"` only as a fallback and report the PowerShell restriction.
+- Use PowerShell-safe commands in the report:
+  - Current folder: `Get-Location`
+  - List files: `Get-ChildItem`
+  - Read file: `Get-Content`
+  - Search text: `Select-String`
+  - Find files: `Get-ChildItem -Recurse`
+  - Create folder: `New-Item -ItemType Directory`
+  - Create file: `New-Item -ItemType File`
+  - Copy: `Copy-Item`
+  - Move/rename: `Move-Item`
+  - Remove temporary diagnostic files only: `Remove-Item`
+  - Command lookup: `Get-Command`
+  - Environment: `Get-ChildItem Env:`
+  - Processes: `Get-Process`
+  - Port check: `Get-NetTCPConnection -LocalPort 3000`, if available
+  - Web request: `Invoke-WebRequest -Uri http://localhost:3000 -Method Head`, or `curl.exe -I http://localhost:3000`
+- Use Command Prompt-safe fallback commands in the report:
+  - Current folder: `cd`
+  - List files: `dir`
+  - Read file: `type`
+  - Search text: `findstr`
+  - Command lookup: `where`
+  - Environment: `set`
+  - Processes: `tasklist`
+  - Port check: `netstat -ano`
+  - Web request: `curl.exe -I http://localhost:3000`
+- On Windows, use `curl.exe` when checking preview reachability. `curl` can be a PowerShell alias for `Invoke-WebRequest`.
+- Use Bash commands only as optional evidence when Bash/Git Bash/WSL is expected for that session.
 
 Use this output format exactly:
 
@@ -53,6 +98,8 @@ CAPGEMINI BUILD CHALLENGE - TECHNICAL DIAGNOSTIC
 
 Date/time:
 Computer/user:
+Operating system:
+Shell tested:
 Project folder:
 Overall status: READY / NEEDS ATTENTION
 
@@ -62,44 +109,36 @@ Evidence:
 [ ] Project files readable
 Evidence:
 
-[ ] Bash/terminal commands needed for app development work
+[ ] Windows PowerShell commands needed for app development work
 Commands tested:
 
 Project/navigation:
-- pwd
-- cd
-- date
-- ls
-- find
+- Get-Location
+- Set-Location
+- Get-Date
+- Get-ChildItem
+- Get-ChildItem -Recurse
 
 File reading and search:
-- cat
+- Get-Content
 - Codex Read/file inspection tool
-- sed
-- rg
-- grep
-- head
-- tail
-- wc
-- sort
-- uniq
-- file
-- stat
+- Select-String
+- Measure-Object
+- Sort-Object
+- Get-Item
+- Get-ItemProperty
 
 File and folder operations:
-- mkdir
-- touch
-- cp
-- mv
-- rm (temporary diagnostic files only; never app/user files)
+- New-Item (temporary diagnostic files only)
+- Copy-Item (temporary diagnostic files only)
+- Move-Item (temporary diagnostic files only)
+- Remove-Item (temporary diagnostic files only; never app/user files)
 
 Environment and process checks:
-- which
-- command -v
-- env
-- printenv
-- ps
-- lsof
+- Get-Command
+- Get-ChildItem Env:
+- Get-Process
+- Get-NetTCPConnection -LocalPort 3000, if available
 
 Git inspection only:
 - git status
@@ -111,9 +150,10 @@ Node and npm:
 - npx --version
 - pnpm -v
 - yarn -v
-- npm install (availability only; do not run unless helper explicitly asks)
-- pnpm install (availability only; do not run unless helper explicitly asks)
-- yarn (availability only; do not run unless helper explicitly asks)
+- npm view next version, or equivalent harmless registry check
+- npm install (run only if dependencies are missing or helper explicitly asks for a full dependency-download test)
+- pnpm install (run only if dependencies are missing or helper explicitly asks for a full dependency-download test)
+- yarn (run only if dependencies are missing or helper explicitly asks for a full dependency-download test)
 - npm ls
 - npm run lint
 - npm run build
@@ -122,7 +162,41 @@ Node and npm:
 - npm start
 
 Preview/network checks:
-- curl -I http://localhost:3000
+- Invoke-WebRequest -Uri http://localhost:3000 -Method Head
+- curl.exe -I http://localhost:3000
+Evidence:
+
+[ ] Command Prompt fallback works, if PowerShell is blocked or limited
+Commands checked:
+- cmd.exe /c cd
+- cmd.exe /c dir
+- cmd.exe /c type package.json
+- cmd.exe /c where node
+- cmd.exe /c where npm
+- cmd.exe /c tasklist
+- cmd.exe /c netstat -ano
+- cmd.exe /c curl.exe -I http://localhost:3000
+Evidence:
+
+[ ] Bash/Git Bash/WSL availability, optional
+Important: This is optional on Capgemini Windows machines unless the session specifically requires Bash.
+Commands checked only if relevant:
+- bash --version
+- wsl --status
+- git --version
+Evidence:
+
+[ ] Core product-crafting abilities work
+Capabilities tested:
+- understand a plain-language app request
+- search the web when current information is needed
+- read project files
+- edit project files
+- create project files when needed
+- run project commands
+- download or verify access to dependencies
+- start the app
+- open and test the preview
 Evidence:
 
 [ ] Codex file tools work
@@ -132,9 +206,9 @@ Capabilities tested:
 - create project files when needed
 Evidence:
 
-[ ] Codex Bash/terminal tool works
+[ ] Codex terminal tool works
 Capabilities tested:
-- run short commands
+- run short PowerShell or terminal commands
 - run npm scripts
 - run a long-lived app preview command
 Evidence:
@@ -172,11 +246,14 @@ Check performed:
 - remove only that temporary diagnostic file
 Evidence:
 
-[ ] Dependencies are already available
+[ ] Dependencies are already available or can be downloaded
 Check performed:
 - node_modules present: yes/no
 - package-lock present: yes/no
-Important: do not run npm install, pnpm install, or yarn during this diagnostic unless the helper explicitly asks.
+- package registry reachable: yes/no
+Commands checked:
+- npm view next version, or equivalent harmless registry check
+- npm install, pnpm install, or yarn only if dependencies are missing or helper explicitly asks for a full dependency-download test
 Evidence:
 
 [ ] Readiness check passes
@@ -217,19 +294,22 @@ Activations or allowances needed from Capgemini:
   - Install or allow npm
   - Allow npx if one-off project tools are needed
   - Allow pnpm and yarn only if a project requires them
-  - Allow Bash/terminal shell command execution
-  - Allow project/navigation commands: pwd, cd, date, ls, find
-  - Allow file reading and search commands: cat, Codex Read/file inspection tool, sed, rg, grep, head, tail, wc, sort, uniq, file, stat
-  - Allow file and folder operation commands: mkdir, touch, cp, mv, rm for temporary diagnostic cleanup only
-  - Allow environment and process check commands: which, command -v, env, printenv, ps, lsof
+  - Allow Windows PowerShell command execution
+  - Allow Command Prompt as a fallback
+  - Allow project/navigation commands: Get-Location, Set-Location, Get-Date, Get-ChildItem
+  - Allow file reading and search commands: Get-Content, Codex Read/file inspection tool, Select-String, Measure-Object, Sort-Object, Get-Item
+  - Allow file and folder operation commands: New-Item, Copy-Item, Move-Item, Remove-Item for temporary diagnostic cleanup only
+  - Allow environment and process check commands: Get-Command, Get-ChildItem Env:, Get-Process, Get-NetTCPConnection
   - Allow git inspection commands only: git status, git diff
-  - Allow preview/network check commands: curl
+  - Allow preview/network check commands: Invoke-WebRequest and curl.exe
   - Allow reading and writing inside the project folder
+  - Allow package registry access for dependency checks and downloads
   - Allow running npm scripts: npm run dev, npm run build, npm run lint, npm run preflight, npm start
-  - Allow local preview on http://localhost:3000
+  - Allow local preview on http://localhost:3000 and alternate local ports if 3000 is busy
   - Allow browser or in-app preview access
   - Allow Codex web search / browser search if up-to-date information is needed
   - Allow npm install, pnpm install, or yarn if dependencies are missing
+  - Allow Bash/Git Bash/WSL only if a specific session requires it
 
 Report recipient:
 - IQ Project
