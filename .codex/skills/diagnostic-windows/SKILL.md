@@ -1,14 +1,14 @@
 ---
-name: diagnostic
+name: diagnostic-windows
 description: >
-  Use this skill when the user types "/diagnostic", "$diagnostic",
-  "run diagnostic", "technical diagnostic", "check the setup", or asks whether
-  a Capgemini builder computer is ready for Windows-based product crafting: using
+  Use this skill when the user types "/diagnostic-windows", "$diagnostic-windows",
+  "windows diagnostic", "diagnostic for windows", "run Windows diagnostic", or
+  asks whether a Capgemini Windows computer is ready for product crafting: using
   PowerShell, reading and editing files, searching the web, downloading
   dependencies, running the app, and previewing the result.
 ---
 
-# Diagnostic
+# Diagnostic Windows
 
 Run a technical readiness diagnostic for helpers, not for COMEX builders.
 
@@ -22,7 +22,7 @@ Rules:
 - Run the checks yourself and record real evidence.
 - The output can be technical. It is for helpers and IQ Project, not for the builder.
 - Return a checklist that can be copied as-is.
-- This is a check/report only. Do not install missing tools, do not change settings, and do not fix the machine during `/diagnostic`.
+- This is a check/report only. Do not install missing tools, do not change settings, and do not fix the machine during `/diagnostic-windows`.
 - It is allowed to test whether dependencies can be downloaded. Prefer a harmless registry check first. Only run `npm install`, `pnpm install`, or `yarn` if dependencies are missing or the helper explicitly asks for a full dependency-download test.
 - Do not ask the builder to troubleshoot.
 - Do not create git commits.
@@ -64,6 +64,8 @@ Windows command guidance:
 - If PowerShell is blocked, use `cmd.exe /c "<command>"` only as a fallback and report the PowerShell restriction.
 - Use PowerShell-safe commands in the report:
   - Current folder: `Get-Location`
+  - Move folders: `Set-Location`
+  - Date/time: `Get-Date`
   - List files: `Get-ChildItem`
   - Read file: `Get-Content`
   - Search text: `Select-String`
@@ -94,7 +96,7 @@ Windows command guidance:
 Use this output format exactly:
 
 ```text
-CAPGEMINI BUILD CHALLENGE - TECHNICAL DIAGNOSTIC
+CAPGEMINI BUILD CHALLENGE - WINDOWS TECHNICAL DIAGNOSTIC
 
 Date/time:
 Computer/user:

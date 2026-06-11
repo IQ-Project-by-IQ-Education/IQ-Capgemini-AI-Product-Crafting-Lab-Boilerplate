@@ -23,7 +23,9 @@ Stack: **Next.js 16 (App Router) + React 19**, with a built-in **local SQLite da
 If the user types one of these phrases, use the matching skill:
 
 - `/givemeideas`, `$givemeideas`, or "give me ideas": use `.codex/skills/givemeideas/SKILL.md`.
-- `/diagnostic`, `$diagnostic`, or "run diagnostic": use `.codex/skills/diagnostic/SKILL.md`.
+- `/diagnostic-mac`, `$diagnostic-mac`, or "run Mac diagnostic": use `.codex/skills/diagnostic-mac/SKILL.md`.
+- `/diagnostic-windows`, `$diagnostic-windows`, or "run Windows diagnostic": use `.codex/skills/diagnostic-windows/SKILL.md`.
+- If the user asks for a generic `/diagnostic`, ask whether the computer is Mac or Windows.
 - `/kickoff`, `$kickoff`, or "kick off": use `.codex/skills/kickoff/SKILL.md`.
 
 ## Interaction rules (how to talk to the user)

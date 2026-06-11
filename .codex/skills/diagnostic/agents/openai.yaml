@@ -1,8 +1,0 @@
-interface:
-  display_name: "Diagnostic"
-  short_description: "Technical PC and tool checklist"
-  brand_color: "#0070AD"
-  default_prompt: "Use $diagnostic to produce a technical readiness checklist for IQ Project."
-
-policy:
-  allow_implicit_invocation: true

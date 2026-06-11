@@ -43,7 +43,7 @@ With only **2 hours** on the clock, every minute spent installing tools, wiring 
 - ✅ Framework, database, and skills **pre-wired** — `npm install && npm run dev` and you're live.
 - ✅ A clean canvas that's **ready to build on**, not a blank folder to assemble.
 - ✅ The assistant's **playbook and guardrails** already in place, so it builds fast and speaks in plain words from the very first message.
-- ✅ A **readiness check** (`/diagnostic`) so helpers can confirm a machine is good to go *before* the Lab starts.
+- ✅ **Mac and Windows readiness checks** (`/diagnostic-mac` and `/diagnostic-windows`) so helpers can confirm a machine is good to go *before* the Lab starts.
 
 The result: builders open the project and start creating in **minutes**, not in an hour of setup.
 
@@ -85,7 +85,8 @@ Everything you need is already set up — nothing to configure.
 - 🎨 **A clean landing page** (`app/page.js`) — your starting canvas, replaced by whatever you build.
 - 🧠 **Project skills** that travel with the folder (`.codex/skills`):
   - **`/givemeideas`** — a short, executive-friendly menu of app ideas to spark your build.
-  - **`/diagnostic`** — a technical readiness check (for helpers) that confirms the machine can build, run, and preview the app.
+  - **`/diagnostic-mac`** — a technical readiness check for Capgemini Macs.
+  - **`/diagnostic-windows`** — a technical readiness check for Capgemini Windows PCs.
   - **`/kickoff`** — prepares, checks, starts, and previews the starter for the participant.
 - 📋 **`AGENTS.md`** — the full playbook the AI assistant follows to talk in plain words and build fast.
 
@@ -138,7 +139,7 @@ You describe an idea  →  The AI assistant builds it  →  It shows on screen  
 │   └── globals.css      # Styling
 ├── lib/
 │   └── db.js            # Local database (your app's memory)
-├── .codex/skills/       # /givemeideas, /diagnostic, and /kickoff skills
+├── .codex/skills/       # /givemeideas, /diagnostic-mac, /diagnostic-windows, and /kickoff skills
 ├── public/              # Images and static assets
 ├── AGENTS.md            # The assistant's full playbook
 └── app.db               # Your saved data (created automatically)
