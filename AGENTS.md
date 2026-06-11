@@ -27,6 +27,8 @@ If the user types one of these phrases, use the matching skill:
 - `/diagnostic-windows`, `$diagnostic-windows`, or "run Windows diagnostic": use `.codex/skills/diagnostic-windows/SKILL.md`.
 - If the user asks for a generic `/diagnostic`, ask whether the computer is Mac or Windows.
 - `/kickoff`, `$kickoff`, or "kick off": use `.codex/skills/kickoff/SKILL.md`.
+- `/capgemini-ui-design`, `$capgemini-ui-design`, "Capgemini design", "charte Capgemini", or any request to build/style UI matching Capgemini's brand: use `.codex/skills/capgemini-ui-design/SKILL.md`.
+- `/capture-bug`, `$capture-bug`, or when the user reports a problem without being able to explain it ("ça marche pas", "j'ai une erreur", "mon site bug", "ça plante", "page blanche"): use `.codex/skills/capture-bug/SKILL.md`.
 
 ## Interaction rules (how to talk to the user)
 
