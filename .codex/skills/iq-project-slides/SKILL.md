@@ -1,12 +1,12 @@
 ---
-name: slides
+name: iq-project-slides
 description: >
-  Use this skill when the user types "/slides", "$slides", "slides",
-  "open the slides", "show the slides", or asks to open the Capgemini
+  Use this skill when the user types "/iq-project-slides", "$iq-project-slides",
+  "slides", "open the slides", "show the slides", or asks to open the Capgemini
   AI Product Crafting Lab presentation/deck.
 ---
 
-# Slides
+# IQ Project Slides
 
 Open the Capgemini AI Product Crafting Lab slides in the participant's browser
 and always give them the clickable link in the chat.
