@@ -29,6 +29,7 @@ If the user types one of these phrases, use the matching skill:
 - `/kickoff`, `$kickoff`, or "kick off": use `.codex/skills/kickoff/SKILL.md`.
 - `/capgemini-ui-design`, `$capgemini-ui-design`, "Capgemini design", "charte Capgemini", or any request to build/style UI matching Capgemini's brand: use `.codex/skills/capgemini-ui-design/SKILL.md`.
 - `/capture-bug`, `$capture-bug`, or when the user reports a problem without being able to explain it ("ça marche pas", "j'ai une erreur", "mon site bug", "ça plante", "page blanche"): use `.codex/skills/capture-bug/SKILL.md`.
+- `/slides`, `$slides`, "slides", "open the slides", or "show the slides": use `.codex/skills/slides/SKILL.md`.
 
 ## Interaction rules (how to talk to the user)
 
