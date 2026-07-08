@@ -40,21 +40,22 @@ Check:
 4. Node.js is installed and available with `node -v`.
 5. npm is installed and available with `npm -v`.
 6. Optional package runners/managers can be checked if relevant: `npx --version`, `pnpm -v`, `yarn -v`.
-7. npm scripts can run from the project folder.
-8. Dependencies are already available, or dependency download access works. If dependencies are missing, report that `npm install`, `pnpm install`, or `yarn` must be allowed, and run the needed install command only if the helper explicitly asks.
-9. Codex can write inside the project when needed.
-10. Codex can edit an existing project file when needed. For the diagnostic itself, do not leave real project edits behind; use a temporary diagnostic file unless the helper asked to remake this skill.
-11. The readiness check passes: `npm run preflight`.
-12. The app can run with `npm run dev`.
-13. The app can start with `npm start` after a successful production build if needed.
-14. The local preview is reachable at `http://localhost:3000`, or at the alternate port chosen by the app if port 3000 is already busy.
-15. Codex file tools can read and edit project files.
-16. Codex terminal execution tool works for project commands.
-17. A browser or in-app preview tool is available.
-18. The browser or in-app preview tool can load the app page.
-19. Web search / browser search is available when the app build needs up-to-date information.
-20. If the app saves information, Codex can test save, refresh, and reload behavior.
-21. Any permission, sandbox, network, browser, web search, command, Node.js, or npm restriction is clearly listed.
+7. Python 3.12 or newer is installed and available (Python 3.14.x preferred). Confirm `python --version` or `python3 --version` works from the terminal, and `pip --version` or `pip3 --version` (or `python3 -m pip --version`) works too. Report the exact version found and whether it meets the 3.12+ requirement.
+8. npm scripts can run from the project folder.
+9. Dependencies are already available, or dependency download access works. If dependencies are missing, report that `npm install`, `pnpm install`, or `yarn` must be allowed, and run the needed install command only if the helper explicitly asks.
+10. Codex can write inside the project when needed.
+11. Codex can edit an existing project file when needed. For the diagnostic itself, do not leave real project edits behind; use a temporary diagnostic file unless the helper asked to remake this skill.
+12. The readiness check passes: `npm run preflight`.
+13. The app can run with `npm run dev`.
+14. The app can start with `npm start` after a successful production build if needed.
+15. The local preview is reachable at `http://localhost:3000`, or at the alternate port chosen by the app if port 3000 is already busy.
+16. Codex file tools can read and edit project files.
+17. Codex terminal execution tool works for project commands.
+18. A browser or in-app preview tool is available.
+19. The browser or in-app preview tool can load the app page.
+20. Web search / browser search is available when the app build needs up-to-date information.
+21. If the app saves information, Codex can test save, refresh, and reload behavior.
+22. Any permission, sandbox, network, browser, web search, command, Node.js, npm, or Python restriction is clearly listed.
 
 Mac command guidance:
 - Prefer the current macOS shell (`zsh` by default, Bash if configured).
@@ -160,6 +161,10 @@ Node and npm:
 - npm run dev
 - npm start
 
+Python:
+- python --version or python3 --version
+- pip --version or pip3 --version or python3 -m pip --version
+
 Preview/network checks:
 - curl -I http://localhost:3000
 Evidence:
@@ -217,6 +222,16 @@ Commands checked:
 - yarn -v
 Evidence:
 
+[ ] Python 3.12 or newer is installed and available (3.14.x preferred)
+Commands tested:
+- python --version or python3 --version
+- pip --version or pip3 --version or python3 -m pip --version
+Python version found:
+Meets 3.12+ requirement: yes/no
+Is 3.14.x (preferred): yes/no
+pip works: yes/no
+Evidence:
+
 [ ] Project write access works
 Check performed:
 - create a temporary diagnostic file
@@ -272,6 +287,7 @@ Activations or allowances needed from Capgemini:
   - Install or allow npm
   - Allow npx if one-off project tools are needed
   - Allow pnpm and yarn only if a project requires them
+  - Install or allow Python 3.12 or newer (3.14.x preferred) with pip, available as python or python3 from the terminal
   - Allow macOS Terminal command execution with zsh or Bash
   - Allow project/navigation commands: pwd, cd, date, ls, find
   - Allow file reading and search commands: cat, Codex Read/file inspection tool, sed, rg, grep, head, tail, wc, sort, uniq, file, stat

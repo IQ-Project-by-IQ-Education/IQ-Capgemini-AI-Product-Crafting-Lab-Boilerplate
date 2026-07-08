@@ -43,21 +43,22 @@ Check:
 5. Node.js is installed and available with `node -v`.
 6. npm is installed and available with `npm -v`.
 7. Optional package runners/managers can be checked if relevant: `npx --version`, `pnpm -v`, `yarn -v`.
-8. npm scripts can run from the project folder.
-9. Dependencies are already available, or dependency download access works. If dependencies are missing, report that `npm install`, `pnpm install`, or `yarn` must be allowed, and run the needed install command only if the helper explicitly asks.
-10. Codex can write inside the project when needed.
-11. Codex can edit an existing project file when needed. For the diagnostic itself, do not leave real project edits behind; use a temporary diagnostic file unless the helper asked to remake this skill.
-12. The readiness check passes: `npm run preflight`.
-13. The app can run with `npm run dev`.
-14. The app can start with `npm start` after a successful production build if needed.
-15. The local preview is reachable at `http://localhost:3000`, or at the alternate port chosen by the app if port 3000 is already busy.
-16. Codex file tools can read and edit project files.
-17. Codex terminal execution tool works for project commands.
-18. A browser or in-app preview tool is available.
-19. The browser or in-app preview tool can load the app page.
-20. Web search / browser search is available when the app build needs up-to-date information.
-21. If the app saves information, Codex can test save, refresh, and reload behavior.
-22. Any permission, sandbox, network, browser, web search, command, Node.js, or npm restriction is clearly listed.
+8. Python 3.12 or newer is installed and available (Python 3.14.x preferred). Confirm `python --version` or `python3 --version` works from the command window (PowerShell or Command Prompt) or Git Bash, and `pip --version` (or `pip3 --version` / `python -m pip --version`) works too. `py --version` is an acceptable extra check on Windows. Report the exact version found and whether it meets the 3.12+ requirement.
+9. npm scripts can run from the project folder.
+10. Dependencies are already available, or dependency download access works. If dependencies are missing, report that `npm install`, `pnpm install`, or `yarn` must be allowed, and run the needed install command only if the helper explicitly asks.
+11. Codex can write inside the project when needed.
+12. Codex can edit an existing project file when needed. For the diagnostic itself, do not leave real project edits behind; use a temporary diagnostic file unless the helper asked to remake this skill.
+13. The readiness check passes: `npm run preflight`.
+14. The app can run with `npm run dev`.
+15. The app can start with `npm start` after a successful production build if needed.
+16. The local preview is reachable at `http://localhost:3000`, or at the alternate port chosen by the app if port 3000 is already busy.
+17. Codex file tools can read and edit project files.
+18. Codex terminal execution tool works for project commands.
+19. A browser or in-app preview tool is available.
+20. The browser or in-app preview tool can load the app page.
+21. Web search / browser search is available when the app build needs up-to-date information.
+22. If the app saves information, Codex can test save, refresh, and reload behavior.
+23. Any permission, sandbox, network, browser, web search, command, Node.js, npm, or Python restriction is clearly listed.
 
 Windows command guidance:
 - Prefer `powershell.exe -NoProfile -Command "<command>"` or `pwsh -NoProfile -Command "<command>"` when available.
@@ -91,6 +92,8 @@ Windows command guidance:
   - Port check: `netstat -ano`
   - Web request: `curl.exe -I http://localhost:3000`
 - On Windows, use `curl.exe` when checking preview reachability. `curl` can be a PowerShell alias for `Invoke-WebRequest`.
+- Python check caution: on Windows, a bare `python` command can be a Microsoft Store stub that prints nothing or opens the Store instead of running Python. If `python --version` returns no version, also try `python3 --version` and `py --version` before concluding Python is missing, and report the stub if that is what was found.
+- If Git Bash is available, also confirm `python --version` and `pip --version` work from Git Bash, since some sessions use it.
 - Use Bash commands only as optional evidence when Bash/Git Bash/WSL is expected for that session.
 
 Use this output format exactly:
@@ -162,6 +165,10 @@ Node and npm:
 - npm run preflight
 - npm run dev
 - npm start
+
+Python:
+- python --version or python3 --version (also py --version if needed)
+- pip --version or pip3 --version or python -m pip --version
 
 Preview/network checks:
 - Invoke-WebRequest -Uri http://localhost:3000 -Method Head
@@ -241,6 +248,19 @@ Commands checked:
 - yarn -v
 Evidence:
 
+[ ] Python 3.12 or newer is installed and available (3.14.x preferred)
+Commands tested:
+- python --version or python3 --version (also py --version if needed)
+- pip --version or pip3 --version or python -m pip --version
+- works from the command window (PowerShell or Command Prompt): yes/no
+- works from Git Bash, if Git Bash is available: yes/no/not available
+Python version found:
+Meets 3.12+ requirement: yes/no
+Is 3.14.x (preferred): yes/no
+pip works: yes/no
+Microsoft Store stub detected instead of real Python: yes/no
+Evidence:
+
 [ ] Project write access works
 Check performed:
 - create a temporary diagnostic file
@@ -296,6 +316,7 @@ Activations or allowances needed from Capgemini:
   - Install or allow npm
   - Allow npx if one-off project tools are needed
   - Allow pnpm and yarn only if a project requires them
+  - Install or allow Python 3.12 or newer (3.14.x preferred) with pip, available as python or python3 from the command window and Git Bash
   - Allow Windows PowerShell command execution
   - Allow Command Prompt as a fallback
   - Allow project/navigation commands: Get-Location, Set-Location, Get-Date, Get-ChildItem
