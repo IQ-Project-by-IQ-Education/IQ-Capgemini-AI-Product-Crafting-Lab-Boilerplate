@@ -63,7 +63,7 @@ This is **not** the Next.js in your training data — conventions have breaking 
 
 ## Data & persistence
 
-Storage is **local SQLite via `better-sqlite3`**, opened in `lib/db.js`, saved to `app.db` at the repo root. It's already whitelisted in `next.config.mjs` (`serverExternalPackages`) and is **server-only**. A starter `items` table exists (`id`, `title`, `created_at`) — rename, extend, or add tables. There is no pre-built example route; use the patterns below.
+Storage is **local SQLite via Node's built-in `node:sqlite`** (`DatabaseSync`), opened in `lib/db.js`, saved to `app.db` at the repo root. No native package to compile and no Python needed — it ships inside Node itself (Node 22.13+ / 23.4+). It is **server-only**. A starter `items` table exists (`id`, `title`, `created_at`) — rename, extend, or add tables. There is no pre-built example route; use the patterns below.
 
 1. **Add a table** in `lib/db.js` with `db.exec(\`CREATE TABLE IF NOT EXISTS ...\`)` (safe to run every start; follow the existing style — autoincrement `id`, `created_at TEXT DEFAULT CURRENT_TIMESTAMP`).
 2. **Create a route** at `app/api/<thing>/route.js` (and `app/api/<thing>/[id]/route.js` to edit/delete one).

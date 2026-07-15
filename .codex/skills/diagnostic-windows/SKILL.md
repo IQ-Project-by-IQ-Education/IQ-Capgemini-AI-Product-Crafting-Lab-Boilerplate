@@ -22,7 +22,7 @@ Rules:
 - Run the checks yourself and record real evidence.
 - The output can be technical. It is for helpers and IQ Project, not for the builder.
 - Return a checklist that can be copied as-is.
-- This is a check/report only for the machine and system tools (Node.js, Python, Git). Do not install those, do not change settings, and do not fix the machine during `/diagnostic-windows`.
+- This is a check/report only for the machine and system tools (Node.js, Git). Do not install those, do not change settings, and do not fix the machine during `/diagnostic-windows`.
 - Downloading the project's own dependencies is part of the check, not a fix. Run a harmless registry check first (`npm view next version`), then run `npm install` (or `pnpm install` / `yarn` if that is the project's package manager) automatically whenever `npm ls` shows packages missing or incomplete. Do not wait for the helper to ask. After the install finishes, re-run the checks that depend on it (`npm run preflight`, `npm run dev`, the preview check) and record the real result instead of the earlier failure.
 - Do not ask the builder to troubleshoot.
 - Do not create git commits.
@@ -30,9 +30,11 @@ Rules:
 - Do not claim that "all tools" work. State exactly what was tested and what is blocked.
 - Prefer Windows PowerShell checks because Capgemini builder computers are expected to run Windows.
 - If PowerShell is unavailable, try Command Prompt checks and report that PowerShell must be allowed.
-- Git, Git Bash, the Unix-style tools it provides (grep, sed, head, tail, wc), pnpm, yarn, and WSL are all optional for this starter. Still test and report them, but do not let any of them block a `READY` result by themselves. Restricted commands that are not part of the core loop (for example `tasklist`, or a single `Get-ChildItem Env:` failure) are informational only and must not block `READY` either.
-- Mark the system `READY` if: Codex can read and edit project files; PowerShell (or Command Prompt as fallback) runs terminal commands; web search works when needed; Node.js and npm are present; Python 3.12+ is present and working; the project's dependencies install successfully (`npm install` completes and `npm ls` is clean); `npm run preflight` and `npm run dev` both succeed; and the local preview loads in the browser/in-app preview tool. That is the full set — everything else tested (Git, Unix tools, WSL, tasklist, env listing, etc.) is reported for completeness but does not change the verdict.
-- Mark the system `NEEDS ATTENTION` only if one of those required items above is actually blocked: file access, file editing, terminal command execution, Node.js, npm, Python 3.12+, dependency install, app startup, local preview, browser/in-app preview, or web search when the session requires current information.
+- Git, Git Bash, the Unix-style tools it provides (grep, sed, head, tail, wc), pnpm, yarn, WSL, and Python are all optional for this starter. Still test and report them, but do not let any of them block a `READY` result by themselves. Restricted commands that are not part of the core loop (for example `tasklist`, or a single `Get-ChildItem Env:` failure) are informational only and must not block `READY` either.
+- Python is no longer required by this boilerplate: the local database now uses Node's built-in `node:sqlite`, not `better-sqlite3`, so nothing needs to compile and no Python or C++ build tools are involved. Still test and report Python for completeness (some participants may add a Python-based feature), but a missing Python must not block `READY`.
+- Node.js version matters instead: `node:sqlite` needs Node.js 22.13+ or 23.4+ to work without a flag (any modern LTS or current release qualifies). Check the version from `node -v` and report if it is older than that.
+- Mark the system `READY` if: Codex can read and edit project files; PowerShell (or Command Prompt as fallback) runs terminal commands; web search works when needed; Node.js (22.13+/23.4+) and npm are present; the project's dependencies install successfully (`npm install` completes and `npm ls` is clean); `npm run preflight` and `npm run dev` both succeed; and the local preview loads in the browser/in-app preview tool. That is the full set — everything else tested (Git, Unix tools, WSL, Python, tasklist, env listing, etc.) is reported for completeness but does not change the verdict.
+- Mark the system `NEEDS ATTENTION` only if one of those required items above is actually blocked: file access, file editing, terminal command execution, Node.js version too old, npm, dependency install, app startup, local preview, browser/in-app preview, or web search when the session requires current information.
 - If something is missing or blocked, write what Capgemini should activate, install, allow, or whitelist. The report is meant to be sent or shown to IQ Project.
 
 Check:
@@ -41,12 +43,12 @@ Check:
 3. Codex can run PowerShell commands commonly needed while building, checking, and previewing the app.
 4. Command Prompt is available as a fallback, if relevant.
 5. Terminal commands run without per-command approval. Note whether default shell access with "Approve for me" is enabled on Codex, or whether every command required a manual approval prompt. Constant per-command approval is a blocker for the Build Challenge and must be reported.
-6. Node.js is installed and available with `node -v`.
+6. Node.js is installed and available with `node -v`, and the version is 22.13+ or 23.4+ (required for `node:sqlite`, the built-in database this boilerplate uses). Report the exact version and whether it meets that minimum.
 7. npm is installed and available with `npm -v`.
 8. Git is installed and available with `git --version`, and public repositories can be pulled. A harmless check such as `git ls-remote https://github.com/vercel/next.js HEAD` is enough; do not clone anything into the project. This is critical on Windows: Git for Windows also provides Git Bash and the Unix-style tools some lab commands need. If Git is missing, report that it must be installed from https://git-scm.com/install/windows.
 9. Unix-style CLI tools are available: `grep`, `sed`, `head`, `tail`, `wc`. These are missing on plain Windows; they normally come from Git Bash (Git for Windows). Test them through Git Bash if it is available (`bash -lc "grep --version"` and similar). If they are missing, report that installing Git for Windows (https://git-scm.com/install/windows) provides them.
 10. Optional package runners/managers can be checked if relevant: `npx --version`, `pnpm -v`, `yarn -v`.
-11. Python 3.12 or newer is installed and available (Python 3.14.x preferred). Confirm `python --version` or `python3 --version` works from the command window (PowerShell or Command Prompt) or Git Bash, and `pip --version` (or `pip3 --version` / `python -m pip --version`) works too. `py --version` is an acceptable extra check on Windows. Report the exact version found and whether it meets the 3.12+ requirement. This is critical: the boilerplate asks for Python when a participant's app needs to initialize its database, so a missing or too-old Python is a blocker.
+11. Python, optional: check `python --version` or `python3 --version` from the command window (PowerShell or Command Prompt) or Git Bash, and `pip --version` (or `pip3 --version` / `python -m pip --version`). `py --version` is an acceptable extra check on Windows. Report the exact version found for completeness, but this boilerplate's database (`node:sqlite`) does not need Python, so a missing or too-old Python must not block `READY`.
 12. Install the project's dependencies before testing anything that depends on them. Check `node_modules` and `package-lock.json`, then run a harmless registry check (`npm view next version`). If `npm ls` shows anything missing or incomplete, run `npm install` (or `pnpm install` / `yarn`) right away and re-run `npm ls` to confirm it is clean. Do this before check 13, so the npm scripts below are tested against a fully installed project instead of failing on missing packages.
 13. npm scripts can run from the now fully-installed project folder: `npm run dev`, `npm run build`, `npm run lint`, `npm run preflight`.
 14. Codex can write inside the project when needed (shell write access in the project folder: create, copy, move, and remove a temporary diagnostic file).
@@ -171,7 +173,7 @@ Node and npm:
 - npm run dev
 - npm start
 
-Python:
+Python, optional (this boilerplate's database does not need it):
 - python --version or python3 --version (also py --version if needed)
 - pip --version or pip3 --version or python -m pip --version
 
@@ -249,10 +251,11 @@ Check performed:
 Runs without per-command approval: yes/no
 Evidence:
 
-[ ] Node.js is installed and available
+[ ] Node.js is installed and available, version 22.13+ or 23.4+ (needed for node:sqlite)
 Command tested:
 - node -v
 Version found:
+Meets 22.13+/23.4+ requirement: yes/no
 Evidence:
 
 [ ] npm is installed and available
@@ -268,15 +271,13 @@ Commands checked:
 - yarn -v
 Evidence:
 
-[ ] Python 3.12 or newer is installed and available (3.14.x preferred)
+[ ] Python is installed and available, optional (this boilerplate's database does not need it)
 Commands tested:
 - python --version or python3 --version (also py --version if needed)
 - pip --version or pip3 --version or python -m pip --version
 - works from the command window (PowerShell or Command Prompt): yes/no
 - works from Git Bash, if Git Bash is available: yes/no/not available
 Python version found:
-Meets 3.12+ requirement: yes/no
-Is 3.14.x (preferred): yes/no
 pip works: yes/no
 Microsoft Store stub detected instead of real Python: yes/no
 Evidence:
@@ -346,7 +347,8 @@ Activations or allowances needed from Capgemini:
   - Install or allow npm
   - Allow npx if one-off project tools are needed
   - Allow pnpm and yarn only if a project requires them
-  - Install or allow Python 3.12 or newer (3.14.x preferred) with pip, available as python or python3 from the command window and Git Bash
+  - Install or allow Node.js 22.13+ or 23.4+ (required for this boilerplate's built-in node:sqlite database)
+  - Python is optional for this boilerplate; only install it if a specific session needs it
   - Install Git for Windows from https://git-scm.com/install/windows (also provides Git Bash and the Unix-style tools grep, sed, head, tail, wc) and allow pulling public repositories
   - Enable default shell access with "Approve for me" on Codex so commands run without per-command approval
   - Allow Windows PowerShell command execution
