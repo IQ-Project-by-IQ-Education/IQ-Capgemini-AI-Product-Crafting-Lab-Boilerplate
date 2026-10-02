@@ -23,7 +23,9 @@ Rules:
 - The output can be technical. It is for helpers and IQ Project, not for the builder.
 - Return a checklist that can be copied as-is.
 - This is a check/report only for the machine and system tools (Node.js, Git). Do not install those, do not change settings, and do not fix the machine during `/diagnostic-mac`.
-- Downloading the project's own dependencies is part of the check, not a fix. Run a harmless registry check first (`npm view next version`), then run `npm install` (or `pnpm install` / `yarn` if that is the project's package manager) automatically whenever `npm ls` shows packages missing or incomplete. Do not wait for the helper to ask. After the install finishes, re-run the checks that depend on it (`npm run preflight`, `npm run dev`, the preview check) and record the real result instead of the earlier failure.
+- Downloading the project's own dependencies is part of the check, not a fix. Run a harmless registry check first (`npm view next version`), then install the dependencies automatically with `bash .codex/skills/diagnostic-mac/scripts/npm-install-test.sh --project` whenever `npm ls` shows packages missing or incomplete. Do not wait for the helper to ask. After the install finishes, re-run the checks that depend on it (`npm run preflight`, `npm run dev`, the preview check) and record the real result instead of the earlier failure.
+- Never run a bare `npm install` during this diagnostic. Every npm install (the stress test and the project's own install) goes through `scripts/npm-install-test.sh` in this skill folder. It has a hard-coded timeout of 180 seconds per attempt and retries 2 more times (3 attempts max), then moves on. The diagnostic must never stop or wait forever on an npm install: whatever the install result, continue with the remaining checks and report it.
+- The install script can take up to about 20 minutes in the worst case (everything timing out). Run it with a terminal command timeout of at least 20 minutes (for example `timeout_ms: 1200000`). If the terminal tool cannot wait that long, start the script in the background with its output sent to a log file, then read the log every 30 seconds until it prints `NPM INSTALL TEST DONE`. Copy its SUMMARY lines into the report.
 - Do not ask the builder to troubleshoot.
 - Do not create git commits.
 - Do not test external cloud services or ask for accounts.
@@ -32,8 +34,8 @@ Rules:
 - Git, the Unix-style tools (grep, sed, head, tail, wc), pnpm, yarn, and Python are all optional for this starter. Still test and report them, but do not let any of them block a `READY` result by themselves.
 - Python is no longer required by this boilerplate: the local database now uses Node's built-in `node:sqlite`, not `better-sqlite3`, so nothing needs to compile and no Python is involved. Still test and report Python for completeness (some participants may add a Python-based feature), but a missing Python must not block `READY`.
 - Node.js version matters instead: `node:sqlite` needs Node.js 22.13+ or 23.4+ to work without a flag (any modern LTS or current release qualifies). Check the version from `node -v` and report if it is older than that.
-- Mark the system `READY` if: Codex can read and edit project files; the terminal runs commands; web search works when needed; Node.js (22.13+/23.4+) and npm are present; the project's dependencies install successfully (`npm install` completes and `npm ls` is clean); `npm run preflight` and `npm run dev` both succeed; and the local preview loads in the browser/in-app preview tool. That is the full set — everything else tested (Git, Unix tools, Python, etc.) is reported for completeness but does not change the verdict.
-- Mark the system `NEEDS ATTENTION` only if one of those required items above is actually blocked: file access, file editing, terminal command execution, Node.js version too old, npm, dependency install, app startup, local preview, browser/in-app preview, or web search when the session requires current information.
+- Mark the system `READY` if: Codex can read and edit project files; the terminal runs commands; web search works when needed; Node.js (22.13+/23.4+) and npm are present; the project's dependencies install successfully (the install script passes and `npm ls` is clean); Stage 1 (basic Next.js app) of the npm install stress test passes (PASSED BUT SLOW still counts as passed, but report it); `npm run preflight` and `npm run dev` both succeed; and the local preview loads in the browser/in-app preview tool. That is the full set — everything else tested (npm install stress test Stage 2, Git, Unix tools, Python, etc.) is reported for completeness but does not change the verdict.
+- Mark the system `NEEDS ATTENTION` only if one of those required items above is actually blocked: file access, file editing, terminal command execution, Node.js not installed or version too old, npm, dependency install, npm install stress test Stage 1 failed or timed out, app startup, local preview, browser/in-app preview, or web search when the session requires current information.
 - If something is missing or blocked, write what Capgemini should activate, install, allow, or whitelist. The report is meant to be sent or shown to IQ Project.
 
 Check:
@@ -41,27 +43,28 @@ Check:
 2. Project files can be read.
 3. Codex can run macOS terminal commands commonly needed while building, checking, and previewing the app.
 4. Terminal commands run without per-command approval. Note whether default shell access with "Approve for me" is enabled on Codex, or whether every command required a manual approval prompt. Constant per-command approval is a blocker for the Build Challenge and must be reported.
-5. Node.js is installed and available with `node -v`, and the version is 22.13+ or 23.4+ (required for `node:sqlite`, the built-in database this boilerplate uses). Report the exact version and whether it meets that minimum.
+5. Node.js is installed: check `command -v node` and `node -v`. If the `node` command is not found, report `Node.js: NOT INSTALLED`, mark the system `NEEDS ATTENTION`, and keep going with the rest of the diagnostic (the npm checks will report as skipped). If it is installed, report where it is installed, the exact version, and whether it meets the 22.13+ or 23.4+ minimum (required for `node:sqlite`, the built-in database this boilerplate uses).
 6. npm is installed and available with `npm -v`.
 7. Git is installed and available with `git --version`, and public repositories can be pulled. A harmless check such as `git ls-remote https://github.com/vercel/next.js HEAD` is enough; do not clone anything into the project.
 8. Unix-style CLI tools are available: `grep`, `sed`, `head`, `tail`, `wc` (standard on macOS; confirm they are not blocked).
 9. Optional package runners/managers can be checked if relevant: `npx --version`, `pnpm -v`, `yarn -v`.
 10. Python, optional: check `python --version` or `python3 --version` from the terminal, and `pip --version` or `pip3 --version` (or `python3 -m pip --version`). Report the exact version found for completeness, but this boilerplate's database (`node:sqlite`) does not need Python, so a missing or too-old Python must not block `READY`.
-11. Install the project's dependencies before testing anything that depends on them. Check `node_modules` and `package-lock.json`, then run a harmless registry check (`npm view next version`). If `npm ls` shows anything missing or incomplete, run `npm install` (or `pnpm install` / `yarn`) right away and re-run `npm ls` to confirm it is clean. Do this before check 12, so the npm scripts below are tested against a fully installed project instead of failing on missing packages.
+11. Install the project's dependencies before testing anything that depends on them. Check `node_modules` and `package-lock.json`, then run a harmless registry check (`npm view next version`). If `npm ls` shows anything missing or incomplete, install them right away from the project folder with `bash .codex/skills/diagnostic-mac/scripts/npm-install-test.sh --project` (same 180-second timeout and 2 retries, never stops the diagnostic), then re-run `npm ls` to confirm it is clean. If it times out or fails 3 times, report it and continue. Do this before check 12, so the npm scripts below are tested against a fully installed project instead of failing on missing packages.
 12. npm scripts can run from the now fully-installed project folder: `npm run dev`, `npm run build`, `npm run lint`, `npm run preflight`.
-13. Codex can write inside the project when needed (shell write access in the project folder: create, copy, move, and remove a temporary diagnostic file).
-14. Codex can edit an existing project file when needed. For the diagnostic itself, do not leave real project edits behind; use a temporary diagnostic file unless the helper asked to remake this skill.
-15. The readiness check passes: `npm run preflight`.
-16. The app can run with `npm run dev`.
-17. The app can start with `npm start` after a successful production build if needed.
-18. The local preview is reachable at `http://localhost:3000` (expect HTTP 200), or at the alternate port chosen by the app if port 3000 is already busy.
-19. Codex file tools can read and edit project files.
-20. Codex terminal execution tool works for project commands.
-21. A browser or in-app preview tool is available.
-22. The browser or in-app preview tool can load the app page.
-23. Web search / browser search is available when the app build needs up-to-date information.
-24. If the app saves information, Codex can test save, refresh, and reload behavior.
-25. Any permission, sandbox, network, browser, web search, command approval, Node.js, npm, Git, or Python restriction is clearly listed.
+13. npm install stress test (does Capgemini security block, slow down, or hang npm downloads?). Run `bash .codex/skills/diagnostic-mac/scripts/npm-install-test.sh` from the project folder. It installs a realistic Next.js project in a throwaway temporary folder (never inside the project), in two stages: Stage 1 is a basic Next.js app (next, react, typescript, eslint, tailwind); Stage 2 is many popular libraries plus the kinds of downloads security tools often block (native binaries like sharp and @swc/core, a package that runs its own install script like esbuild, and a package downloaded straight from GitHub). Each stage gets 180 seconds per attempt and 3 attempts max. Report each stage's result exactly as printed: PASSED, PASSED BUT SLOW (over 60 seconds), FAILED (with the error codes found), or TIMED OUT (npm hung and was killed, with the last download it managed before hanging). Also report the npm registry, proxy, strict-ssl and cafile values the script prints. Run it even if the project's own install already worked, and never stop the diagnostic because of it.
+14. Codex can write inside the project when needed (shell write access in the project folder: create, copy, move, and remove a temporary diagnostic file).
+15. Codex can edit an existing project file when needed. For the diagnostic itself, do not leave real project edits behind; use a temporary diagnostic file unless the helper asked to remake this skill.
+16. The readiness check passes: `npm run preflight`.
+17. The app can run with `npm run dev`.
+18. The app can start with `npm start` after a successful production build if needed.
+19. The local preview is reachable at `http://localhost:3000` (expect HTTP 200), or at the alternate port chosen by the app if port 3000 is already busy.
+20. Codex file tools can read and edit project files.
+21. Codex terminal execution tool works for project commands.
+22. A browser or in-app preview tool is available.
+23. The browser or in-app preview tool can load the app page.
+24. Web search / browser search is available when the app build needs up-to-date information.
+25. If the app saves information, Codex can test save, refresh, and reload behavior.
+26. Any permission, sandbox, network, browser, web search, command approval, Node.js, npm, Git, or Python restriction is clearly listed.
 
 Mac command guidance:
 - Prefer the current macOS shell (`zsh` by default, Bash if configured).
@@ -212,8 +215,11 @@ Runs without per-command approval: yes/no
 Evidence:
 
 [ ] Node.js is installed and available, version 22.13+ or 23.4+ (needed for node:sqlite)
-Command tested:
+Commands tested:
+- command -v node
 - node -v
+Installed: yes / NOT INSTALLED
+Installed at:
 Version found:
 Meets 22.13+/23.4+ requirement: yes/no
 Evidence:
@@ -264,10 +270,25 @@ Check performed:
 - node_modules present: yes/no
 - package-lock present: yes/no
 - package registry reachable: yes/no
-- if dependencies were missing or incomplete, ran npm install (or pnpm install / yarn) automatically, before testing any npm scripts below, and re-checked npm ls
+- if dependencies were missing or incomplete, ran the install script automatically (180s timeout, 3 attempts max), before testing any npm scripts below, and re-checked npm ls
 Commands checked:
 - npm view next version, or equivalent harmless registry check
-- npm install, pnpm install, or yarn, run automatically when dependencies are missing or incomplete
+- bash .codex/skills/diagnostic-mac/scripts/npm-install-test.sh --project, run automatically when dependencies are missing or incomplete (180s timeout, 3 attempts max)
+Install result: PASSED / PASSED BUT SLOW / FAILED / TIMED OUT / not needed
+Evidence:
+
+[ ] npm install stress test (Capgemini security check on npm downloads)
+Command tested:
+- bash .codex/skills/diagnostic-mac/scripts/npm-install-test.sh
+Hard-coded limits: 180s timeout per attempt, 3 attempts max (1 try + 2 retries) per stage, flagged slow above 60s
+npm registry / proxy / https-proxy / strict-ssl / cafile:
+Stage 1 - Basic Next.js app (next, react, typescript, eslint, tailwind): PASSED / PASSED BUT SLOW / FAILED / TIMED OUT
+- time taken and attempts needed:
+- error codes or last download before hanging, if not passed:
+Stage 2 - Many libraries + native binaries (sharp, @swc/core) + install scripts (esbuild) + GitHub download: PASSED / PASSED BUT SLOW / FAILED / TIMED OUT
+- time taken and attempts needed:
+- error codes or last download before hanging, if not passed:
+What this means: npm works normally / npm is slow / npm hangs forever (likely proxy, firewall or antivirus) / npm downloads are refused (give the error)
 Evidence:
 
 [ ] npm project commands are available
@@ -335,6 +356,7 @@ Activations or allowances needed from Capgemini:
   - Allow browser or in-app preview access
   - Allow Codex web search / browser search if up-to-date information is needed
   - Allow npm install, pnpm install, or yarn if dependencies are missing
+  - If the npm install stress test hung or failed: allow https://registry.npmjs.org (and the proxy/SSL inspection certificate npm needs, via npm `cafile`), allow downloads from GitHub (codeload.github.com), and allow npm packages to run their install scripts and native binaries (sharp, @swc/core, esbuild) without antivirus blocking
 
 Report recipient:
 - IQ Project
