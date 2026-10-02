@@ -20,17 +20,19 @@ Stack: **Next.js 16 (App Router) + React 19**, with a built-in **local SQLite da
 
 ## Project skills
 
+The skills live in `.agents/skills/` (where Codex finds them). Claude Code finds them through small pointer files in `.claude/skills/` that send it to the same `.agents/skills/` instructions. Edit a skill only in `.agents/skills/`; if you rename it or change its description, update its `.claude/skills/` pointer header to match. Do not add a `.codex/skills/` folder back: Codex would list every skill twice.
+
 If the user types one of these phrases, use the matching skill:
 
-- `/givemeideas`, `$givemeideas`, or "give me ideas": use `.codex/skills/givemeideas/SKILL.md`.
-- `/diagnostic-mac`, `$diagnostic-mac`, or "run Mac diagnostic": use `.codex/skills/diagnostic-mac/SKILL.md`.
-- `/diagnostic-windows`, `$diagnostic-windows`, or "run Windows diagnostic": use `.codex/skills/diagnostic-windows/SKILL.md`.
+- `/givemeideas`, `$givemeideas`, or "give me ideas": use `.agents/skills/givemeideas/SKILL.md`.
+- `/diagnostic-mac`, `$diagnostic-mac`, or "run Mac diagnostic": use `.agents/skills/diagnostic-mac/SKILL.md`.
+- `/diagnostic-windows`, `$diagnostic-windows`, or "run Windows diagnostic": use `.agents/skills/diagnostic-windows/SKILL.md`.
 - If the user asks for a generic `/diagnostic`, ask whether the computer is Mac or Windows.
-- `/kickoff`, `$kickoff`, or "kick off": use `.codex/skills/kickoff/SKILL.md`.
-- `/capgemini-ui-design`, `$capgemini-ui-design`, "Capgemini design", "charte Capgemini", or any request to build/style UI matching Capgemini's brand: use `.codex/skills/capgemini-ui-design/SKILL.md`.
-- `/capture-bug`, `$capture-bug`, or when the user reports a problem without being able to explain it ("ça marche pas", "j'ai une erreur", "mon site bug", "ça plante", "page blanche"): use `.codex/skills/capture-bug/SKILL.md`.
-- `/iq-project-slides`, `$iq-project-slides`, "slides", "open the slides", or "show the slides": use `.codex/skills/iq-project-slides/SKILL.md`.
-- `/masterprompt`, `$masterprompt`, "master prompt", or "master prompt maker": use `.codex/skills/masterprompt/SKILL.md`.
+- `/kickoff`, `$kickoff`, or "kick off": use `.agents/skills/kickoff/SKILL.md`.
+- `/capgemini-ui-design`, `$capgemini-ui-design`, "Capgemini design", "charte Capgemini", or any request to build/style UI matching Capgemini's brand: use `.agents/skills/capgemini-ui-design/SKILL.md`.
+- `/capture-bug`, `$capture-bug`, or when the user reports a problem without being able to explain it ("ça marche pas", "j'ai une erreur", "mon site bug", "ça plante", "page blanche"): use `.agents/skills/capture-bug/SKILL.md`.
+- `/iq-project-slides`, `$iq-project-slides`, "slides", "open the slides", or "show the slides": use `.agents/skills/iq-project-slides/SKILL.md`.
+- `/masterprompt`, `$masterprompt`, "master prompt", or "master prompt maker": use `.agents/skills/masterprompt/SKILL.md`.
 
 ## Interaction rules (how to talk to the user)
 

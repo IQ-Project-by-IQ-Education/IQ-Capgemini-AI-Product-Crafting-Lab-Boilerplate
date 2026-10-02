@@ -83,7 +83,7 @@ Everything you need is already set up — nothing to configure.
 - ⚡ **Next.js 16 + React 19** (App Router) — the modern web framework powering the app.
 - 💾 **Built-in local database** — anything your app needs to remember is saved automatically to a single `app.db` file in this folder. **No accounts, no cloud, no setup.** Defined in `lib/db.js`.
 - 🎨 **A clean landing page** (`app/page.js`) — your starting canvas, replaced by whatever you build.
-- 🧠 **Project skills** that travel with the folder (`.codex/skills`):
+- 🧠 **Project skills** that travel with the folder and work in both **Codex** and **Claude Code** (`.agents/skills`, with Claude Code entry points in `.claude/skills`):
   - **`/givemeideas`** — a short, executive-friendly menu of app ideas to spark your build.
   - **`/diagnostic-mac`** — a technical readiness check for Capgemini Macs.
   - **`/diagnostic-windows`** — a technical readiness check for Capgemini Windows PCs.
@@ -139,7 +139,8 @@ You describe an idea  →  The AI assistant builds it  →  It shows on screen  
 │   └── globals.css      # Styling
 ├── lib/
 │   └── db.js            # Local database (your app's memory)
-├── .codex/skills/       # /givemeideas, /diagnostic-mac, /diagnostic-windows, and /kickoff skills
+├── .agents/skills/      # The skills (/givemeideas, /diagnostic-mac, /diagnostic-windows, /kickoff...), read by Codex
+├── .claude/skills/      # Claude Code entry points that point to .agents/skills
 ├── public/              # Images and static assets
 ├── AGENTS.md            # The assistant's full playbook
 └── app.db               # Your saved data (created automatically)
