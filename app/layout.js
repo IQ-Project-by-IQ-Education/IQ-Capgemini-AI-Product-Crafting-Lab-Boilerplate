@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Capgemini Build Challenge",
-  description: "Your blank canvas — tell Codex what you'd like to build.",
+  title: "TeoExpert",
+  description: "Find internal experts by skill and project experience.",
 };
 
 export default function RootLayout({ children }) {
